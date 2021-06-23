@@ -33,13 +33,16 @@ def login():
     if(user):
         if(crypto.check_password(user.password, password)):
             j = JWT_API()
-            data = {'user_id': user.id}
+            data = {'user_id': user.id, 'user_name':user.user_name}
             token = j.create_jwt(data)
             return jsonify({'jwt': token,
                             'success': True,
                             'message': f'welcome {user_name}'})
 
-    return 'who the hell are you '
+    return jsonify({
+        'message':'who the hell are you! ',
+        'success':False
+        })
 
 
 @app.route('/register',methods=['POST'])
