@@ -7,3 +7,4 @@ db = SQLAlchemy(app)
 db.create_all()
 
 from . import views
+from .profile import views

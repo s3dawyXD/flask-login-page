@@ -63,13 +63,29 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         body = json.loads(res.data)
         self.assertTrue(body.get("success"))
+        
+        
         user = User.query.filter_by(user_name='test_user').one_or_none()
         if(user):
             user.delete()
         else:
             self.assertFalse(True)
     
+    def test_profile(self):
+        _ = self.app.post('/register',json = {'userName':'test_user','password':'123'},follow_redirects=True)
+        res = self.app.post('/login',json = {'userName':'test_user','password':'123'},follow_redirects=True)
+        body = json.loads(res.data)
+        jwt = body.get("jwt")
+        res = self.app.get('/profile', headers={"Authorization": 'bearer '+ jwt})
+        self.assertEqual(res.status_code, 200)
+        body = json.loads(res.data)
+        self.assertTrue(body.get("success"))
 
+        user = User.query.filter_by(user_name='test_user').one_or_none()
+        if(user):
+            user.delete()
+        else:
+            self.assertFalse(True)
     
 
 if __name__ == "__main__":
